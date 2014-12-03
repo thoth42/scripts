@@ -111,9 +111,10 @@ Coins used will be half-dollars, quarters, dimes, nickels, and pennies, worth 50
 :N and 
 :P. 
 
-The argument passed in will be an integer representing the value in cents. The return value should be a hash with the symbols as keys, and the numbers of coins as values. Coins that are not used should not be included in the hash. If the argument passed in is 0, then the method should return an empty hash.
+The argument passed in will be an integer representing the value in cents. The return value should be a hash with the symbols as keys, and the numbers of coins as values. Coins that are not used should not be included in the hash. If the argument passed in is 0, then the method should return an empty hash.For example:
 
-For example:make_change(0)
+```ruby
+make_change(0)
 # => {}
 
 make_change(1)
@@ -124,6 +125,7 @@ make_change(43)
 
 make_change(91)
 # => {:H=>1, :Q=>1, :D=>1, :N=>1, :P=>1}
+```
 
 ### Tags 
 Algorithms; Mathematics; Logic; Numbers
