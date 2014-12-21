@@ -8,3 +8,7 @@ It downloades all image of the source id even if the website page is paginated.
 
 There some improvements to be made from UI side but the purpose of making this 
 script was improving the programming skills in ruby language.
+
+```
+$ ruby mini.rb username password folder_name id
+```
