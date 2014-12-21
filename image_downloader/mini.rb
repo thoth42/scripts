@@ -1,37 +1,29 @@
+#!/usr/env  ruby
+
 require 'mechanize'
 require 'colorize'
 
 module Mini
   class Page
-    attr_reader :m, :link, :links, :tmplinks, :downlinks
+    attr_reader :m, :main_link, :links, :tmplinks, :downlinks
 
-    def initialize link
-      @m = Mechanize.new { |agent| agent.follow_meta_refresh = true }
-      @link = link
+    def initialize mechanize, link
+      @m = mechanize
+      @main_link = link
       @links = []
       @tmplinks = []
       @downlinks = []
     end
 
     def run
-      login
       gather_main_links
       gather_second_links
       gather_third_links
       save_to_file
     end
 
-    def login
-     m.get(link) do |page|
-      page.form_with(action: 'http://my.minitokyo.net/login') do |form|
-        form.username = ARGV[0]
-        form.password = ARGV[1]
-      end.submit
-     end
-    end
-
     def gather_main_links
-      m.get(link) do |page|
+      m.get(main_link) do |page|
         page.links_with(:href => %r{./view/\d*}).each do |link|
           links << link.href
         end
@@ -66,8 +58,31 @@ module Mini
         print "|".green
       end
     end
+  end
+
+  class Crawler
+    attr_reader :m, :link
+
+    def initialize
+      @m = Mechanize.new { |agent| agent.follow_meta_refresh = true }
+      @link = 'http://browse.minitokyo.net/gallery?tid=48066&index=3'
+    end
+
+    def run
+      login
+      Page.new(m, link).run
+    end
+
+    def login
+     m.get(link) do |page|
+      page.form_with(action: 'http://my.minitokyo.net/login') do |form|
+        form.username = ARGV[0]
+        form.password = ARGV[1]
+      end.submit
+     end
+    end
 
   end
 end
 
-Mini::Page.new.run
+Mini::Crawler.new.run
